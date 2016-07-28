@@ -5,9 +5,9 @@ public class Edge {
 	private Node node;
 
 	private double weight;
-	private  HashMap<String, HashMap<String, Double>> prefixes;
+	private HashMap<String, HashMap<String, Double>> prefixes;
 
-	public Edge(Node n, double weight2, HashMap<String, HashMap<String, Double>> prefixes ) {
+	public Edge(Node n, double weight2, HashMap<String, HashMap<String, Double>> prefixes) {
 		node = n;
 		setWeight(weight2);
 		setPrefixes(prefixes);

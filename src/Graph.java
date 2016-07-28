@@ -33,18 +33,19 @@ public class Graph {
 		entityList.put(entityName, attributes);
 
 	}
-	
+
 	public void addArcsWithinEntity(Node node1) {
 		HashMap<String, ArrayList<Node>> entityList = getNodeList();
 		Utility utility = new Utility();
-		//prefixes.put("prefix", );
+		// prefixes.put("prefix", );
 		String entityName = node1.getEntityName();
 		if (entityList.containsKey(entityName)) {
 			ArrayList<Node> nodes = entityList.get(entityName);
 			if (nodes != null) {
 				for (Node node2 : nodes) {
 					if (node2 != node1) {
-						HashMap<String, HashMap<String, Double>> prefixes = utility.getPrefixes(node1.getName(), node2.getName());
+						HashMap<String, HashMap<String, Double>> prefixes = utility.getPrefixes(node1.getName(),
+								node2.getName());
 						addArc(node1, node2, (node1.getAqRank() + node2.getAqRank()), prefixes);
 						addArc(node2, node1, (node1.getAqRank() + node2.getAqRank()), prefixes);
 					}
@@ -53,7 +54,6 @@ public class Graph {
 			}
 		}
 	}
-	
 
 	public void addToList(Node node, ArrayList<Edge> connectedNodes) {
 
@@ -104,7 +104,6 @@ public class Graph {
 		}
 		return returnList;
 	}
-	
 
 	public double getDistanceBetween(Node source, Node sink) {
 		for (Edge edge : adjacencyList.get(source)) {
@@ -114,34 +113,20 @@ public class Graph {
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-	
-	public void computeRelatedResults(Node source)	{
+
+	public void computeRelatedResults(Node source) {
 		Utility utility = new Utility();
 		List<SearchQuery> queryList = new ArrayList<SearchQuery>();
-		
-		for(Edge edge : adjacencyList.get(source))	{
+
+		for (Edge edge : adjacencyList.get(source)) {
 			queryList.add(new SearchQuery(utility.getBestPrefix(source.getName(), "sales"), edge.getWeight()));
 		}
-		Collections.sort((List)queryList);
-		
-		for(SearchQuery query : queryList)	{
+		Collections.sort((List) queryList);
+
+		for (SearchQuery query : queryList) {
 			System.out.println(query.getQuery() + ": " + query.getAqRank());
 		}
 	}
-	/*public double getPrefixesForNode(Node node)	{
-		for(Edge edge: adjacencyList.get(node))	{
-			HashMap<String, HashMap<String, Double>> prefixes = edge.getPrefixes();
-			Iterator it = prefixes.entrySet().iterator();
-			Map.Entry<String, ArrayList<Double>> entry = (Map.Entry) it.next();
-			double firstWordPriority = entry.getValue().get(0);
-			double secondWordPriority = entry.getValue().get(1);
-			if(firstWordPriority > secondWordPriority)	{
-				boolean isFirstWord = true;
-				
-			}
-		}
-		return 0.0;
-	}*/
 
 	public HashMap<String, ArrayList<Node>> getNodeList() {
 		return entityList;

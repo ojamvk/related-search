@@ -26,7 +26,7 @@ public class Utility {
 		String result1 = entry.getKey();
 		Double value1 = entry.getValue();
 		entry = prefixData.get(sink).entrySet().iterator().next();
-		result1 += " " + source + " "+ entry.getKey() + " "+ sink;
+		result1 += " " + source + " " + entry.getKey() + " " + sink;
 		value1 += entry.getValue();
 
 		prefixData = getPrefixes(sink, source);
@@ -34,28 +34,25 @@ public class Utility {
 		String result2 = entry.getKey();
 		Double value2 = entry.getValue();
 		entry = prefixData.get(source).entrySet().iterator().next();
-		result2 += " " + sink + " "+ entry.getKey() + " "+ source;
+		result2 += " " + sink + " " + entry.getKey() + " " + source;
 		value2 += entry.getValue();
-		
-		
-		return value1>value2 ? result1 : result2;
-	}
-	public static HashMap sortByValues(HashMap map) { 
-	       List list = new LinkedList(map.entrySet());
-	       Collections.sort(list, new Comparator() {
-	            public int compare(Object o1, Object o2) {
-	               return ((Comparable) ((Map.Entry) (o2)).getValue())
-	                  .compareTo(((Map.Entry) (o1)).getValue());
-	            }
-	       });
-	       HashMap sortedHashMap = new LinkedHashMap();
-	       for (Iterator it = list.iterator(); it.hasNext();) {
-	              Map.Entry entry = (Map.Entry) it.next();
-	              sortedHashMap.put(entry.getKey(), entry.getValue());
-	       } 
-	       return sortedHashMap;
-	  }
 
-	
-	
+		return value1 > value2 ? result1 : result2;
+	}
+
+	public static HashMap sortByValues(HashMap map) {
+		List list = new LinkedList(map.entrySet());
+		Collections.sort(list, new Comparator() {
+			public int compare(Object o1, Object o2) {
+				return ((Comparable) ((Map.Entry) (o2)).getValue()).compareTo(((Map.Entry) (o1)).getValue());
+			}
+		});
+		HashMap sortedHashMap = new LinkedHashMap();
+		for (Iterator it = list.iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			sortedHashMap.put(entry.getKey(), entry.getValue());
+		}
+		return sortedHashMap;
+	}
+
 }

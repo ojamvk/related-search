@@ -14,7 +14,7 @@ public class Utility {
 		HashMap<String, Double> prefixList2 = new HashMap<String, Double>();
 		prefixList2.put("with lowest", 0.1);
 		prefixList2.put("with highest", 0.61);
-		prefixData.put("gross sales", prefixList2);
+		prefixData.put("sales", prefixList2);
 
 		return prefixData;
 	}
@@ -25,7 +25,7 @@ public class Utility {
 		String result1 = entry.getKey();
 		Double value1 = entry.getValue();
 		entry = prefixData.get(sink).entrySet().iterator().next();
-		result1 += " " + source + entry.getKey() + sink;
+		result1 += " " + source + " "+ entry.getKey() + " "+ sink;
 		value1 += entry.getValue();
 
 		prefixData = getPrefixes(sink, source);
@@ -33,8 +33,12 @@ public class Utility {
 		String result2 = entry.getKey();
 		Double value2 = entry.getValue();
 		entry = prefixData.get(source).entrySet().iterator().next();
-		result2 += " " + sink + entry.getKey() + source;
+		result2 += " " + sink + " "+ entry.getKey() + " "+ sink;
 		value2 += entry.getValue();
+		
+		
 		return value1>value2 ? result1 : result2;
 	}
+	
+	
 }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -103,6 +104,7 @@ public class Graph {
 		}
 		return returnList;
 	}
+	
 
 	public double getDistanceBetween(Node source, Node sink) {
 		for (Edge edge : adjacencyList.get(source)) {
@@ -115,10 +117,16 @@ public class Graph {
 	
 	public void computeRelatedResults(Node source)	{
 		Utility utility = new Utility();
-		for(Edge edge : adjacencyList.get(source))	{
-			utility.getBestPrefix(source.getName(), edge.getNode().getName());
-		}
+		List<SearchQuery> queryList = new ArrayList<SearchQuery>();
 		
+		for(Edge edge : adjacencyList.get(source))	{
+			queryList.add(new SearchQuery(utility.getBestPrefix(source.getName(), "sales"), edge.getWeight()));
+		}
+		Collections.sort((List)queryList);
+		
+		for(SearchQuery query : queryList)	{
+			System.out.println(query.getQuery() + ": " + query.getAqRank());
+		}
 	}
 	/*public double getPrefixesForNode(Node node)	{
 		for(Edge edge: adjacencyList.get(node))	{

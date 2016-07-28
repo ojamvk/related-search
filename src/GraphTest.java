@@ -37,7 +37,7 @@ public class GraphTest {
 				for(int i=0; i<nodesInEntity.size(); i++)	{
 					if(nodesInEntity.get(i).getName().equalsIgnoreCase(term))	{
 						System.out.println("Found node: "+ term);
-						
+						graph.computeRelatedResults(nodesInEntity.get(i));
 						//Found the node in the graph. Compute similarity based on prefix first word or prefix second word.
 					}
 				}

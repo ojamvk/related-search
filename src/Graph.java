@@ -112,7 +112,15 @@ public class Graph {
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-	public double getPrefixesForNode(Node node)	{
+	
+	public void computeRelatedResults(Node source)	{
+		Utility utility = new Utility();
+		for(Edge edge : adjacencyList.get(source))	{
+			utility.getBestPrefix(source.getName(), edge.getNode().getName());
+		}
+		
+	}
+	/*public double getPrefixesForNode(Node node)	{
 		for(Edge edge: adjacencyList.get(node))	{
 			HashMap<String, HashMap<String, Double>> prefixes = edge.getPrefixes();
 			Iterator it = prefixes.entrySet().iterator();
@@ -125,7 +133,7 @@ public class Graph {
 			}
 		}
 		return 0.0;
-	}
+	}*/
 
 	public HashMap<String, ArrayList<Node>> getNodeList() {
 		return entityList;

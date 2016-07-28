@@ -8,12 +8,13 @@ public class Utility {
 		prefixList1.put("top 5", 0.1);
 		prefixList1.put("bottom 5", 0.61);
 		prefixList1.put("by", 0.56);
-		// Sort by values
+		prefixList1 = sortByValues(prefixList1);
 		prefixData.put("country", prefixList1);
 
 		HashMap<String, Double> prefixList2 = new HashMap<String, Double>();
 		prefixList2.put("with lowest", 0.1);
 		prefixList2.put("with highest", 0.61);
+		prefixList2 = sortByValues(prefixList2);
 		prefixData.put("sales", prefixList2);
 
 		return prefixData;
@@ -33,12 +34,28 @@ public class Utility {
 		String result2 = entry.getKey();
 		Double value2 = entry.getValue();
 		entry = prefixData.get(source).entrySet().iterator().next();
-		result2 += " " + sink + " "+ entry.getKey() + " "+ sink;
+		result2 += " " + sink + " "+ entry.getKey() + " "+ source;
 		value2 += entry.getValue();
 		
 		
 		return value1>value2 ? result1 : result2;
 	}
+	public static HashMap sortByValues(HashMap map) { 
+	       List list = new LinkedList(map.entrySet());
+	       Collections.sort(list, new Comparator() {
+	            public int compare(Object o1, Object o2) {
+	               return ((Comparable) ((Map.Entry) (o2)).getValue())
+	                  .compareTo(((Map.Entry) (o1)).getValue());
+	            }
+	       });
+	       HashMap sortedHashMap = new LinkedHashMap();
+	       for (Iterator it = list.iterator(); it.hasNext();) {
+	              Map.Entry entry = (Map.Entry) it.next();
+	              sortedHashMap.put(entry.getKey(), entry.getValue());
+	       } 
+	       return sortedHashMap;
+	  }
+
 	
 	
 }

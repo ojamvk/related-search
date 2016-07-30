@@ -2,7 +2,30 @@ import java.util.*;
 
 public class Utility {
 
-	public HashMap getPrefixes(String source, String sink) {
+	public HashMap<String, HashMap<String, Double>> getPrefixes(String source, String sink)	{
+		HashMap<String, HashMap<String, Double>> prefixDataMap = new HashMap<String, HashMap<String, Double>>();
+		
+		HashMap<String, ArrayList<Prefix>> prefixData = PrefixRelation.getPrefixData(source, sink);
+		//temporary data structure change. Later update everything to Prefix object.
+		
+		HashMap<String, Double> prefixSourceMap = new HashMap<String, Double>();
+		for(Prefix prefix : prefixData.get(source)){
+			prefixSourceMap.put(prefix.getPrefix(), prefix.getValue());
+		}
+		prefixSourceMap = sortByValues(prefixSourceMap);
+		prefixDataMap.put(source, prefixSourceMap);
+		
+		HashMap<String, Double> prefixSinkMap = new HashMap<String, Double>();
+		for(Prefix prefix : prefixData.get(sink)){
+			prefixSinkMap.put(prefix.getPrefix(), prefix.getValue());
+		}
+		prefixSinkMap = sortByValues(prefixSinkMap);
+		prefixDataMap.put(sink, prefixSinkMap);
+		
+		return prefixDataMap;
+		
+	}
+	/*public HashMap getPrefixes(String source, String sink) {
 		HashMap<String, HashMap<String, Double>> prefixData = new HashMap<String, HashMap<String, Double>>();
 		HashMap<String, Double> prefixList1 = new HashMap<String, Double>();
 		prefixList1.put("top 5", 0.1);
@@ -18,7 +41,7 @@ public class Utility {
 		prefixData.put("sales", prefixList2);
 
 		return prefixData;
-	}
+	}*/
 
 	public String getBestPrefix(String source, String sink) {
 		HashMap<String, HashMap<String, Double>> prefixData = getPrefixes(source, sink);
@@ -38,6 +61,7 @@ public class Utility {
 		value2 += entry.getValue();
 
 		return value1 > value2 ? result1 : result2;
+		
 	}
 
 	public static HashMap sortByValues(HashMap map) {

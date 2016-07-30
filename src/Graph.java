@@ -119,7 +119,7 @@ public class Graph {
 		List<SearchQuery> queryList = new ArrayList<SearchQuery>();
 
 		for (Edge edge : adjacencyList.get(source)) {
-			queryList.add(new SearchQuery(utility.getBestPrefix(source.getName(), "sales"), edge.getWeight()));
+			queryList.add(new SearchQuery(utility.getBestPrefix(source.getName(), edge.getNode().getName()), edge.getWeight()));
 		}
 		Collections.sort((List) queryList);
 

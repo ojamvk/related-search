@@ -9,7 +9,7 @@ public class GraphTest {
 	public static void main(String[] args) {
 
 		JsonFileParser fileParser = new JsonFileParser();
-		Graph graph = fileParser.parseFile("C:\\Users\\Reshma\\Downloads\\retail_data_model.txt");
+		Graph graph = fileParser.parseFile("C:\\Users\\rvenka22\\Downloads\\retail_data_model.txt");
 
 		System.out.println(graph.toString());
 		HashMap<String, Double> prefixesWord1 = new HashMap<String, Double>();

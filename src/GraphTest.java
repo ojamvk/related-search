@@ -9,16 +9,10 @@ public class GraphTest {
 	public static void main(String[] args) {
 
 		JsonFileParser fileParser = new JsonFileParser();
-		Graph graph = fileParser.parseFile("C:\\Users\\rvenka22\\Downloads\\retail_data_model.txt");
+		Graph graph = fileParser.parseFile("C:\\Users\\Reshma\\Downloads\\retail_data_model.txt");
 
 		System.out.println(graph.toString());
-		HashMap<String, Double> prefixesWord1 = new HashMap<String, Double>();
-		prefixesWord1.put("total", 0.9);
-		prefixesWord1.put("top", 0.3);
-
-		HashMap<String, Double> prefixesWord2 = new HashMap<String, Double>();
-		prefixesWord2.put("in", 0.9);
-		prefixesWord2.put("for", 0.3);
+		
 
 		System.out.println("Enter query: ");
 		Scanner sc = new Scanner(System.in);
@@ -33,11 +27,12 @@ public class GraphTest {
 				Map.Entry<String, ArrayList<Node>> entry = (Map.Entry) it.next();
 				ArrayList<Node> nodesInEntity = entry.getValue();
 				for (int i = 0; i < nodesInEntity.size(); i++) {
+					long startTime = System.currentTimeMillis();
 					if (nodesInEntity.get(i).getName().equalsIgnoreCase(term)) {
 						System.out.println("Found node: " + term);
 						graph.computeRelatedResults(nodesInEntity.get(i));
-						// Found the node in the graph. Compute similarity based
-						// on prefix first word or prefix second word.
+						long endTime = System.currentTimeMillis();
+						System.out.println(endTime - startTime);
 					}
 				}
 			}

@@ -119,7 +119,10 @@ public class Graph {
 		List<SearchQuery> queryList = new ArrayList<SearchQuery>();
 
 		for (Edge edge : adjacencyList.get(source)) {
-			queryList.add(new SearchQuery(utility.getBestPrefix(source.getName(), edge.getNode().getName()), edge.getWeight()));
+			if (!(edge.getNode().getName().equals(source.getName()))) {
+				queryList.add(new SearchQuery(utility.getBestPrefix(source.getName(), edge.getNode().getName()),
+						edge.getWeight()));
+			}
 		}
 		Collections.sort((List) queryList);
 
@@ -154,9 +157,10 @@ public class Graph {
 				s += " : ";
 				if (adjacencyList != null && adjacencyList.get(node) != null) {
 					for (Edge n : adjacencyList.get(node)) {
-						s += n.getNode().getName() + ",";
+						s += n.getNode().getName() + ", ";
 					}
 				}
+				s = s.substring(0, s.length()-2);
 				s += "\n";
 			}
 		}

@@ -45,7 +45,7 @@ public class Graph {
 				for (Node node2 : nodes) {
 					if (node2 != node1) {
 						HashMap<String, HashMap<String, Double>> prefixes = utility.getPrefixes(node1.getName(),
-								node2.getName());
+								node2.getName(), new ArrayList<SearchQuery>());
 						addArc(node1, node2, (node1.getAqRank() + node2.getAqRank()), prefixes);
 						addArc(node2, node1, (node1.getAqRank() + node2.getAqRank()), prefixes);
 					}
@@ -114,21 +114,24 @@ public class Graph {
 		return Double.POSITIVE_INFINITY;
 	}
 
-	public void computeRelatedResults(Node source) {
+	public ArrayList<SearchQuery> computeRelatedResults(Node source) {
 		Utility utility = new Utility();
-		List<SearchQuery> queryList = new ArrayList<SearchQuery>();
+		ArrayList<SearchQuery> queryList = new ArrayList<SearchQuery>();
 
 		for (Edge edge : adjacencyList.get(source)) {
 			if (!(edge.getNode().getName().equals(source.getName()))) {
-				queryList.add(new SearchQuery(utility.getBestPrefix(source.getName(), edge.getNode().getName()),
-						edge.getWeight()));
+				ArrayList<String> query = utility.getBestPrefix(source.getName(), edge.getNode().getName(), queryList);
+				if (query != null)
+					queryList.add(new SearchQuery(query, edge.getWeight()));
+
 			}
 		}
 		Collections.sort((List) queryList);
 
-		for (SearchQuery query : queryList) {
+		/*for (SearchQuery query : queryList) {
 			System.out.println(query.getQuery() + ": " + query.getAqRank());
-		}
+		}*/
+		return queryList;
 	}
 
 	public HashMap<String, ArrayList<Node>> getNodeList() {
@@ -160,7 +163,7 @@ public class Graph {
 						s += n.getNode().getName() + ", ";
 					}
 				}
-				s = s.substring(0, s.length()-2);
+				s = s.substring(0, s.length() - 2);
 				s += "\n";
 			}
 		}

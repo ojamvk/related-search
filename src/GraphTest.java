@@ -12,15 +12,14 @@ public class GraphTest {
 		Graph graph = fileParser.parseFile("C:\\Users\\Reshma\\Downloads\\retail_data_model.txt");
 
 		System.out.println(graph.toString());
-		
 
 		System.out.println("Enter query: ");
 		Scanner sc = new Scanner(System.in);
 		String query = sc.nextLine();
 		String[] terms = query.split(" ");
+		ArrayList<SearchQuery> resultList = new ArrayList<SearchQuery>();
 		for (String term : terms) {
 			HashMap<String, Double> similarity = new HashMap<String, Double>();
-			String result = "";
 			HashMap<String, ArrayList<Node>> entityList = graph.getNodeList();
 			Iterator it = entityList.entrySet().iterator();
 			while (it.hasNext()) {
@@ -30,12 +29,21 @@ public class GraphTest {
 					long startTime = System.currentTimeMillis();
 					if (nodesInEntity.get(i).getName().equalsIgnoreCase(term)) {
 						System.out.println("Found node: " + term);
-						graph.computeRelatedResults(nodesInEntity.get(i));
+						ArrayList<SearchQuery> queryList = graph.computeRelatedResults(nodesInEntity.get(i));
+						for (SearchQuery result : queryList) {
+							resultList.add(result);
+						}
 						long endTime = System.currentTimeMillis();
 						System.out.println(endTime - startTime);
 					}
 				}
 			}
+		}
+		int i = 0;
+		while (i<resultList.size() && i < 10) {
+			SearchQuery result = resultList.get(i);
+			System.out.println(result.getQuery() + ": " + result.getAqRank());
+			i++;
 		}
 
 		// graph.getMaxWeightAdjacentNode(node).getNode().getName());

@@ -29,41 +29,6 @@ public class Prefix {
 		this.value = value;
 	}
 
-	public static ArrayList<Prefix> getPrefixSourceList(String nodeName, ArrayList<SearchQuery> queryList) {
-		ArrayList<Prefix> prefixList = new ArrayList<Prefix>();
-		switch (nodeName) {
-		// case hfType
-		case "country":
-			prefixList.add(new Prefix("top 10", 4.5));
-			prefixList.add(new Prefix("bottom 10", 8.5));
-			prefixList.add(new Prefix("by", 4.5));
-			prefixList.add(new Prefix("for all", 8.5));
-			prefixList.add(new Prefix("with highest", 2.5));
-			prefixList.add(new Prefix("with lowest", 6.5));
-			prefixList.add(new Prefix("for", 3.5));
-			prefixList.add(new Prefix("not for", 4.5));
-			prefixList.add(new Prefix("top 5", 2.5));
-			prefixList.add(new Prefix("bottom 5", 6.5));
-			break;
-		case "sales":
-			prefixList.add(new Prefix("by", 4.5));
-			prefixList.add(new Prefix("for all", 8.5));
-			prefixList.add(new Prefix("with highest", 2.5));
-			prefixList.add(new Prefix("with lowest", 6.5));
-			prefixList.add(new Prefix("for", 3.5));
-			prefixList.add(new Prefix("not for", 4.5));
-			prefixList.add(new Prefix("top 5", 2.5));
-			prefixList.add(new Prefix("bottom 5", 6.5));
-			break;
-		default:
-			prefixList.add(new Prefix("worst", 3.5));
-			prefixList.add(new Prefix("best", 4.5));
-			break;
-		}
-		prefixList = getCleanPrefixList(prefixList, queryList, true);
-		return prefixList;
-	}
-
 	public static ArrayList<Prefix> getCleanPrefixList(ArrayList<Prefix> prefixList, ArrayList<SearchQuery> queryList,
 			Boolean isSource) {
 		ArrayList<Prefix> cleanPrefixList = new ArrayList<Prefix>();
@@ -71,7 +36,7 @@ public class Prefix {
 		for (Prefix prefix : prefixList) {
 			Boolean found = false;
 			for (SearchQuery query : queryList) {
-				if (prefix.getPrefix().equals(isSource ? query.getSourcePrefix() : query.getSinkPrefix())) {
+				if (prefix.getPrefix().equalsIgnoreCase(isSource ? query.getSourcePrefix() : query.getSinkPrefix())) {
 					found = true;
 					break;
 				}
@@ -80,31 +45,22 @@ public class Prefix {
 			if (!found)
 				cleanPrefixList.add(prefix);
 		}
-		// System.out.println(cleanPrefixList.size());
 		return cleanPrefixList;
 	}
-
-	public static ArrayList<Prefix> getPrefixSinkList(String nodeName, ArrayList<SearchQuery> queryList) {
+	
+	public static ArrayList<Prefix> getPrefixSourceList(String hfType, ArrayList<SearchQuery> queryList, HashMap<String, PrefixRelation> prefixMap) {
 		ArrayList<Prefix> prefixList = new ArrayList<Prefix>();
-		switch (nodeName) {
-		case "country":
-			prefixList.add(new Prefix("by", 4.5));
-			prefixList.add(new Prefix("for all", 8.5));
-			prefixList.add(new Prefix("with highest", 2.5));
-			prefixList.add(new Prefix("with lowest", 6.5));
-			prefixList.add(new Prefix("for", 3.5));
-			prefixList.add(new Prefix("not for", 4.5));
-			break;
-		case "sales":
-			prefixList.add(new Prefix("with highest", 2.5));
-			prefixList.add(new Prefix("with lowest", 6.5));
-			break;
-		default:
-			prefixList.add(new Prefix("for", 3.5));
-			prefixList.add(new Prefix("not for", 4.5));
-			break;
-		}
+		//hfType = hfType.toLowerCase();
+		prefixList = prefixMap.get(hfType).getSourcePrefixList();
+		prefixList = getCleanPrefixList(prefixList, queryList, true);
+		return prefixList;
+	}
+	public static ArrayList<Prefix> getPrefixSinkList(String hfType, ArrayList<SearchQuery> queryList, HashMap<String, PrefixRelation> prefixMap) {
+		ArrayList<Prefix> prefixList = new ArrayList<Prefix>();
+		hfType = hfType.toLowerCase();
+		prefixList = prefixMap.get(hfType).getSinkPrefixList();
 		prefixList = getCleanPrefixList(prefixList, queryList, false);
 		return prefixList;
 	}
+
 }

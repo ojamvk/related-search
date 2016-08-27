@@ -4,6 +4,8 @@ public class Utility {
 
 	public HashMap<String, HashMap<String, Double>> getPrefixes(String source, String sink,
 			ArrayList<SearchQuery> queryList) {
+		source = source.toLowerCase();
+		sink = sink.toLowerCase();
 		HashMap<String, HashMap<String, Double>> prefixDataMap = new HashMap<String, HashMap<String, Double>>();
 
 		HashMap<String, ArrayList<Prefix>> prefixData = PrefixRelation.getPrefixData(source, sink, queryList);
@@ -28,51 +30,49 @@ public class Utility {
 
 	}
 
-	public ArrayList<String> getBestPrefix(String source, String sink, ArrayList<SearchQuery> queryList) {
-		HashMap<String, HashMap<String, Double>> prefixData = getPrefixes(source, sink, queryList);
+	public ArrayList<String> getBestPrefix(Node source, Node sink, ArrayList<SearchQuery> queryList) {
+		HashMap<String, HashMap<String, Double>> prefixData = getPrefixes(source.getHfType(), sink.getHfType(), queryList);
 		ArrayList<String> resultArray = new ArrayList<String>();
 		if (prefixData.isEmpty())
 			return null;
-		if (!prefixData.get(source).entrySet().iterator().hasNext())
+		if (!prefixData.get(source.getHfType()).entrySet().iterator().hasNext())
 			return null;
-		Map.Entry<String, Double> entry1 = prefixData.get(source).entrySet().iterator().next();
+		Map.Entry<String, Double> entry1 = prefixData.get(source.getHfType()).entrySet().iterator().next();
 		String prefix1 = entry1.getKey();
 		Double value1 = entry1.getValue();
-		if (!prefixData.get(sink).entrySet().iterator().hasNext())
+		if (!prefixData.get(sink.getHfType()).entrySet().iterator().hasNext())
 			return null;
-		entry1 = prefixData.get(sink).entrySet().iterator().next();
-		String result1 = prefix1 + " " + source + " " + entry1.getKey() + " " + sink;
+		entry1 = prefixData.get(sink.getHfType()).entrySet().iterator().next();
+		String result1 = prefix1 + " " + source.getName() + " " + entry1.getKey() + " " + sink.getName();
 		value1 += entry1.getValue();
-
-		Map.Entry<String, Double> entry2 = prefixData.get(source).entrySet().iterator().next();
-		prefixData = getPrefixes(sink, source, queryList);
-		entry2 = prefixData.get(sink).entrySet().iterator().next();
+		Map.Entry<String, Double> entry2 = prefixData.get(source.getHfType()).entrySet().iterator().next();
+		prefixData = getPrefixes(sink.getHfType(), source.getHfType(), queryList);
+		entry2 = prefixData.get(sink.getHfType()).entrySet().iterator().next();
 		String prefix2 = entry2.getKey();
-		Double value2 = entry2.getValue();
-		entry2 = prefixData.get(source).entrySet().iterator().next();
-		String result2 = prefix2 + " " + sink + " " + entry2.getKey() + " " + source;
+		Double value2 = Double.MIN_VALUE;
+		if(prefixData.get(source.getHfType()).entrySet().iterator().hasNext()) {
+		value2 = entry2.getValue();
+		entry2 = prefixData.get(source.getHfType()).entrySet().iterator().next();
+		String result2 = prefix2 + " " + sink.getName() + " " + entry2.getKey() + " " + source.getName();
 		value2 += entry2.getValue();
-
+		}
 		if (value1 > value2) {
 			resultArray.add(prefix1);
-			resultArray.add(source);
+			resultArray.add(source.getName());
 			resultArray.add(entry1.getKey());
-			resultArray.add(sink);
+			resultArray.add(sink.getName());
 		} else {
 			resultArray.add(prefix2);
-			resultArray.add(sink);
+			resultArray.add(sink.getName());
 			resultArray.add(entry2.getKey());
-			resultArray.add(source);
+			resultArray.add(source.getName());
 		}
 
 		return resultArray;
 		
 	}
 
-	public void removePrefix(String node, String prefix) {
-
-	}
-
+	
 	public static HashMap sortByValues(HashMap map) {
 		List list = new LinkedList(map.entrySet());
 		Collections.sort(list, new Comparator() {

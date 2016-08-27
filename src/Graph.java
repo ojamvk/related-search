@@ -44,8 +44,8 @@ public class Graph {
 			if (nodes != null) {
 				for (Node node2 : nodes) {
 					if (node2 != node1) {
-						HashMap<String, HashMap<String, Double>> prefixes = utility.getPrefixes(node1.getName(),
-								node2.getName(), new ArrayList<SearchQuery>());
+						HashMap<String, HashMap<String, Double>> prefixes = utility.getPrefixes(node1.getHfType(),
+								node2.getHfType(), new ArrayList<SearchQuery>());
 						addArc(node1, node2, (node1.getAqRank() + node2.getAqRank()), prefixes);
 						addArc(node2, node1, (node1.getAqRank() + node2.getAqRank()), prefixes);
 					}
@@ -119,8 +119,8 @@ public class Graph {
 		ArrayList<SearchQuery> queryList = new ArrayList<SearchQuery>();
 
 		for (Edge edge : adjacencyList.get(source)) {
-			if (!(edge.getNode().getName().equals(source.getName()))) {
-				ArrayList<String> query = utility.getBestPrefix(source.getName(), edge.getNode().getName(), queryList);
+			if (!(edge.getNode().getName().equalsIgnoreCase(source.getName()))) {
+				ArrayList<String> query = utility.getBestPrefix(source, edge.getNode(), queryList);
 				if (query != null)
 					queryList.add(new SearchQuery(query, edge.getWeight()));
 
@@ -128,9 +128,6 @@ public class Graph {
 		}
 		Collections.sort((List) queryList);
 
-		/*for (SearchQuery query : queryList) {
-			System.out.println(query.getQuery() + ": " + query.getAqRank());
-		}*/
 		return queryList;
 	}
 

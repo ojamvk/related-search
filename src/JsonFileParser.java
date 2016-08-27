@@ -1,4 +1,6 @@
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,7 +15,6 @@ public class JsonFileParser {
 		try {
 			Object object = parser.parse(new FileReader(path));
 			JSONObject jsonObject = (JSONObject) object;
-			String author = (String) jsonObject.get("Author");
 			JSONArray entityList = (JSONArray) jsonObject.get("entities");
 			System.out.println("\nEntity List:");
 			Iterator<JSONObject> iterator = entityList.iterator();
@@ -42,5 +43,46 @@ public class JsonFileParser {
 		}
 
 		return graph;
+	}
+
+	public static HashMap<String, PrefixRelation> getPrefixMap(String path) {
+		HashMap<String, PrefixRelation> prefixMap = new HashMap<String, PrefixRelation>();
+		JSONParser parser = new JSONParser();
+		try {
+			Object object = parser.parse(new FileReader(path));
+			JSONObject jsonObject = (JSONObject) object;
+			JSONArray prefixList = (JSONArray) jsonObject.get("prefixData");
+			Iterator<JSONObject> iterator = prefixList.iterator();
+			while (iterator.hasNext()) {
+				JSONObject prefixObject = iterator.next();
+				String hfType = (String) prefixObject.get("hfType");
+				ArrayList<Prefix> sourcePrefixList = new ArrayList<Prefix>();
+				ArrayList<Prefix> sinkPrefixList = new ArrayList<Prefix>();
+				//System.out.println(hfType);
+				sourcePrefixList = getPrefixListFromJsonArray((JSONArray) prefixObject.get("sourcePrefixes"));
+				sinkPrefixList = getPrefixListFromJsonArray((JSONArray) prefixObject.get("sinkPrefixes"));
+				
+				PrefixRelation relation = new PrefixRelation(sourcePrefixList, sinkPrefixList);
+				prefixMap.put(hfType, relation);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return prefixMap;
+
+	}
+
+	private static ArrayList<Prefix> getPrefixListFromJsonArray(JSONArray array) {
+		ArrayList<Prefix> prefixList = new ArrayList<Prefix>();
+		Iterator<JSONObject> it = array.iterator();
+		while (it.hasNext()) {
+			JSONObject prefix = it.next();
+			//System.out.println((String) prefix.get("prefix") + " : " + (Double) prefix.get("priority"));
+			prefixList.add(new Prefix((String) prefix.get("prefix"), (Double) prefix.get("priority")));
+		}
+
+		return prefixList;
 	}
 }

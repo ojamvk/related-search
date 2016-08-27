@@ -9,7 +9,7 @@ public class GraphTest {
 	public static void main(String[] args) {
 
 		JsonFileParser fileParser = new JsonFileParser();
-		Graph graph = fileParser.parseFile("C:\\Users\\Reshma\\Downloads\\retail_data_model.txt");
+		Graph graph = fileParser.parseFile("JsonFiles/retail_data_model.txt");
 
 		System.out.println(graph.toString());
 
@@ -28,13 +28,12 @@ public class GraphTest {
 				for (int i = 0; i < nodesInEntity.size(); i++) {
 					long startTime = System.currentTimeMillis();
 					if (nodesInEntity.get(i).getName().equalsIgnoreCase(term)) {
-						System.out.println("Found node: " + term);
 						ArrayList<SearchQuery> queryList = graph.computeRelatedResults(nodesInEntity.get(i));
 						for (SearchQuery result : queryList) {
 							resultList.add(result);
 						}
 						long endTime = System.currentTimeMillis();
-						System.out.println(endTime - startTime);
+						System.out.println("Time taken for "+term+":"+(endTime - startTime) + " ms");
 					}
 				}
 			}
@@ -42,7 +41,7 @@ public class GraphTest {
 		int i = 0;
 		while (i<resultList.size() && i < 10) {
 			SearchQuery result = resultList.get(i);
-			System.out.println(result.getQuery() + ": " + result.getAqRank());
+			System.out.println(result.getQuery());
 			i++;
 		}
 

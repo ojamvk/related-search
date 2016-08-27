@@ -11,7 +11,7 @@ public class Node {
 	private String entityName;
 
 	public String getHfType() {
-		return hfType;
+		return hfType.toLowerCase();
 	}
 
 	public void setHfType(String hfType) {

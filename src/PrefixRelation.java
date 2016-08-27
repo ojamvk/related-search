@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class PrefixRelation {
 
@@ -27,39 +28,35 @@ public class PrefixRelation {
 		this.sinkPrefixList = sinkPrefixList;
 	}
 
-	public static HashMap<String, ArrayList<Prefix>> getPrefixData(String source, String sink,
+	public static HashMap<String, ArrayList<Prefix>> getPrefixData(String sourceHfType, String sinkHfType,
 			ArrayList<SearchQuery> queryList) {
 		HashMap<String, ArrayList<Prefix>> prefixData = new HashMap<String, ArrayList<Prefix>>();
-
-		if (getGlobalPrefixData(queryList).containsKey(source))
-			prefixData.put(source, getGlobalPrefixData(queryList).get(source).getSourcePrefixList());
+		HashMap<String, PrefixRelation> prefixMap = JsonFileParser.getPrefixMap("JsonFiles/Prefix.json");
+		HashMap<String, PrefixRelation> globalMap = getFilteredPrefixData(queryList,prefixMap);
+		if (globalMap.containsKey(sourceHfType))
+			prefixData.put(sourceHfType, globalMap.get(sourceHfType).getSourcePrefixList());
 		else
-			prefixData.put(source, Prefix.getPrefixSourceList("", queryList));
+			prefixData.put(sourceHfType, Prefix.getPrefixSourceList("", queryList, prefixMap));
 
-		if (getGlobalPrefixData(queryList).containsKey(sink))
-			prefixData.put(sink, getGlobalPrefixData(queryList).get(sink).getSinkPrefixList());
+		if (globalMap.containsKey(sinkHfType))
+			prefixData.put(sinkHfType, globalMap.get(sinkHfType).getSinkPrefixList());
 		else
-			prefixData.put(sink, Prefix.getPrefixSinkList("", queryList));
-
-		// om
+			prefixData.put(sinkHfType, Prefix.getPrefixSinkList("", queryList, prefixMap));
 
 		return prefixData;
 	}
 
-	private static HashMap<String, PrefixRelation> getGlobalPrefixData(ArrayList<SearchQuery> queryList) {
+	private static HashMap<String, PrefixRelation> getFilteredPrefixData(ArrayList<SearchQuery> queryList, HashMap<String, PrefixRelation> prefixMap) {
 		HashMap<String, PrefixRelation> data = new HashMap<String, PrefixRelation>();
-
-		data.put("country", new PrefixRelation(Prefix.getPrefixSourceList("country", queryList),
-				Prefix.getPrefixSinkList("country", queryList)));
-		data.put("sales", new PrefixRelation(Prefix.getPrefixSourceList("sales", queryList),
-				Prefix.getPrefixSinkList("sales", queryList)));
-		data.put("product", new PrefixRelation(Prefix.getPrefixSourceList("product", queryList),
-				Prefix.getPrefixSinkList("product", queryList)));
-
+		
+		Set<String> hfTypes = prefixMap.keySet();
+		for(String hfType: hfTypes)	{
+			data.put(hfType, new PrefixRelation(Prefix.getPrefixSourceList(hfType, queryList, prefixMap),
+					Prefix.getPrefixSinkList(hfType, queryList,prefixMap)));
+		}
+		
 		return data;
 	}
 
-	private void removePrefixData() {
-
-	}
+	
 }

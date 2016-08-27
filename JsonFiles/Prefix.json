@@ -1,0 +1,86 @@
+{
+  "prefixData" :
+  [
+    {
+      "hfType" : "money",
+      "sourcePrefixes" : 
+      [
+        { "prefix" : "Highest", "priority":2.4},
+        { "prefix" : "Lowest", "priority":1.4},
+        { "prefix" : "Compare", "priority":1.4},
+        { "prefix" : "", "priority":0.4}
+      ],
+      "sinkPrefixes" : 
+      [
+        { "prefix" : "with highest", "priority":2.4},
+        { "prefix" : "with lowest", "priority":1.4}
+      ]
+    },  
+    {
+      "hfType" : "number",
+      "sourcePrefixes" : 
+      [
+        { "prefix" : "Most", "priority":2.4},
+        { "prefix" : "Least", "priority":1.4},
+        { "prefix" : "Average", "priority":0.7}
+        
+      ],
+      "sinkPrefixes" : 
+      [
+        { "prefix" : "with highest", "priority":2.4},
+        { "prefix" : "with lowest", "priority":1.4}
+      ]
+    },
+    {
+      "hfType" : "string",
+      "sourcePrefixes" : 
+      [
+        { "prefix" : "Total number of", "priority":2.4},
+        { "prefix" : "Maximum number of", "priority":1.4},
+        { "prefix" : "Minimum number of", "priority":2.3}
+      ],
+      "sinkPrefixes" : 
+      [
+        { "prefix" : "with highest", "priority":1.6},
+        { "prefix" : "with lowest", "priority":1.4}
+      ]
+    },
+    {
+      "hfType" : "country",
+      "sourcePrefixes" : 
+      [
+        { "prefix" : "Top 10", "priority":2.4},
+        { "prefix" : "Top 20", "priority":1.4},
+        { "prefix" : "Top 5", "priority":0.7}
+        
+      ],
+      "sinkPrefixes" : 
+      [
+        { "prefix" : "for", "priority":2.4}
+      ]
+    },
+    {
+      "hfType" : "date",
+      "sourcePrefixes" : 
+      [
+        { "prefix" : "", "priority":2.4}
+      ],
+      "sinkPrefixes" : 
+      [
+        { "prefix" : "for most recent", "priority":2.4}
+      ]
+    }
+    ,
+    {
+      "hfType" : "",
+      "sourcePrefixes" : 
+      [
+        { "prefix" : "", "priority":2.4}
+      ],
+      "sinkPrefixes" : 
+      [
+        { "prefix" : "", "priority":2.4}
+      ]
+    }
+  ] 
+}
